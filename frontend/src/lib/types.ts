@@ -50,3 +50,19 @@ export interface DashboardStats {
   samplesLast24h: number;
   passesLast7d: number;
 }
+
+export interface EnergyDaily {
+  id: number;
+  workshopId: number;
+  workDate: string;
+  kwh: number;
+  peakKw: number | null;
+}
+
+export interface EnergySummary {
+  workshopId: number | null;
+  start: string | null;
+  end: string | null;
+  days: number;
+  totalKwh: number;
+}

@@ -34,7 +34,16 @@ MySQL 连接：`inkmill` / `inkmill` / `inkmill`（库名/用户/密码）
 2. **Mill**：`workshopId`, `millCode`（同车间唯一）, `pigmentBase`, `bowlLiters`, `status`（`grinding` \| `idle` \| `wash`）
 3. **ViscositySample**：`millId`, `sampledAt`, `viscosityPaS`（须 &gt; 0，否则 HTTP 400）, `tempC`, `notes`
 4. **GrindPass**：`millId`, `startedAt`, `passNo`（≥ 1）, `durationMin`（&gt; 0）, `mediaType`, `operatorName`
-5. **Dashboard**：`workshopTotal`, `grindingMillCount`, `samplesLast24h`, `passesLast7d`
+5. **EnergyDaily**：`workshopId`, `workDate`（同车间同日唯一）, `kwh`（≥ 0）, `peakKw`（可空，≥ 0）
+6. **Dashboard**：`workshopTotal`, `grindingMillCount`, `samplesLast24h`, `passesLast7d`
+
+### 能耗日报 API
+
+- `GET /api/energy-dailies?workshopId=&start=&end=` — 按车间与日期区间（`YYYY-MM-DD`）列表
+- `POST /api/energy-dailies` / `PUT /api/energy-dailies/{id}` / `DELETE /api/energy-dailies/{id}` — 增改删
+- `GET /api/energy-dailies/summary?workshopId=&start=&end=` — 返回 `{ workshopId, start, end, days, totalKwh }` 区间合计
+
+前端侧栏「能耗日报」页可按车间 + 日期区间查看明细表与合计 kWh。
 
 ## 快速启动（Docker）
 

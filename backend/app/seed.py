@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from app.auth import hash_password
 from app.database import SessionLocal
+from app.models.energy_daily import EnergyDaily
 from app.models.grind_pass import GrindPass
 from app.models.mill import Mill
 from app.models.user import User
@@ -112,6 +113,31 @@ def seed() -> None:
             print("Seed data inserted.")
         else:
             print("Seed skipped (workshops exist).")
+
+        if db.query(EnergyDaily).count() == 0:
+            workshop = db.query(Workshop).order_by(Workshop.id).first()
+            if workshop:
+                today = datetime.now().date()
+                demo = [
+                    ("486.00", "32.50"),
+                    ("512.40", "35.10"),
+                    ("498.20", "33.80"),
+                    ("530.00", "36.40"),
+                    ("505.60", None),
+                ]
+                db.add_all(
+                    [
+                        EnergyDaily(
+                            workshop_id=workshop.id,
+                            work_date=today - timedelta(days=offset),
+                            kwh=Decimal(kwh),
+                            peak_kw=Decimal(peak) if peak else None,
+                        )
+                        for offset, (kwh, peak) in zip(range(4, -1, -1), demo)
+                    ]
+                )
+                db.commit()
+                print("Energy daily seed data inserted.")
     finally:
         db.close()
 

@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from app.models.energy_daily import EnergyDaily
 from app.models.grind_pass import GrindPass
 from app.models.mill import Mill
 from app.models.user import User
@@ -63,4 +64,14 @@ def grind_pass_json(row: GrindPass) -> dict:
         "durationMin": _num(row.duration_min) or 0,
         "mediaType": row.media_type,
         "operatorName": row.operator_name,
+    }
+
+
+def energy_daily_json(row: EnergyDaily) -> dict:
+    return {
+        "id": row.id,
+        "workshopId": row.workshop_id,
+        "workDate": row.work_date.isoformat() if row.work_date else None,
+        "kwh": _num(row.kwh) or 0,
+        "peakKw": _num(row.peak_kw),
     }
