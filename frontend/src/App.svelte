@@ -6,8 +6,9 @@
   import Mills from './routes/Mills.svelte';
   import ViscositySamples from './routes/ViscositySamples.svelte';
   import GrindPasses from './routes/GrindPasses.svelte';
+  import EnergyDailies from './routes/EnergyDailies.svelte';
 
-  type PageId = 'dashboard' | 'workshops' | 'mills' | 'samples' | 'passes';
+  type PageId = 'dashboard' | 'workshops' | 'mills' | 'energy' | 'samples' | 'passes';
 
   let page: PageId = 'dashboard';
 
@@ -15,6 +16,7 @@
     { id: 'dashboard', label: '仪表盘' },
     { id: 'workshops', label: '车间' },
     { id: 'mills', label: '研磨机' },
+    { id: 'energy', label: '能耗日报' },
     { id: 'samples', label: '粘度取样' },
     { id: 'passes', label: '研磨遍次' },
   ];
@@ -57,6 +59,8 @@
         <Workshops />
       {:else if page === 'mills'}
         <Mills />
+      {:else if page === 'energy'}
+        <EnergyDailies />
       {:else if page === 'samples'}
         <ViscositySamples />
       {:else}

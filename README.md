@@ -1,6 +1,6 @@
 # InkMill-01 · 油墨研磨台账
 
-面向印刷油墨研磨车间的**研磨机状态、粘度取样与研磨遍次**台账系统。  
+面向印刷油墨研磨车间的**研磨机状态、粘度取样、研磨遍次与车间能耗日报**台账系统。  
 **不是**库存、电商或 CMS 场景。
 
 ## 技术栈
@@ -34,7 +34,20 @@ MySQL 连接：`inkmill` / `inkmill` / `inkmill`（库名/用户/密码）
 2. **Mill**：`workshopId`, `millCode`（同车间唯一）, `pigmentBase`, `bowlLiters`, `status`（`grinding` \| `idle` \| `wash`）
 3. **ViscositySample**：`millId`, `sampledAt`, `viscosityPaS`（须 &gt; 0，否则 HTTP 400）, `tempC`, `notes`
 4. **GrindPass**：`millId`, `startedAt`, `passNo`（≥ 1）, `durationMin`（&gt; 0）, `mediaType`, `operatorName`
-5. **Dashboard**：`workshopTotal`, `grindingMillCount`, `samplesLast24h`, `passesLast7d`
+5. **EnergyDaily**（车间能耗日报）：`workshopId`, `workDate`（YYYY-MM-DD）, `kwh`（用电量，非负）, `peakKw`（峰值功率 kW，可空、非负）；同一车间同一日期唯一
+6. **Dashboard**：`workshopTotal`, `grindingMillCount`, `samplesLast24h`, `passesLast7d`
+
+### 能耗日报接口（`/api/energy-dailies`，均需登录）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/energy-dailies?workshopId=&startDate=&endDate=` | 按车间与日期区间（含端点）列出日报，日期为 YYYY-MM-DD |
+| GET | `/energy-dailies/summary?workshopId=&startDate=&endDate=` | 区间汇总：`totalKwh`（合计 kWh）、`maxPeakKw`、`dayCount` |
+| POST | `/energy-dailies` | 新建；`kwh` 非负、`peakKw` 可空非负；同车间同日重复返回 400 |
+| PUT | `/energy-dailies/{id}` | 更新（同样校验唯一与非负） |
+| DELETE | `/energy-dailies/{id}` | 删除 |
+
+前端侧栏「能耗日报」页：选择车间与日期区间后查看明细表格及区间合计 kWh。
 
 ## 快速启动（Docker）
 

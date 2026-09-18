@@ -1,10 +1,20 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from flask import jsonify
 
 
 def error(message: str, status: int = 400):
     return jsonify({"message": message}), status
+
+
+def normalize_date(value: str) -> date:
+    value = (value or "").strip()
+    for fmt in ("%Y-%m-%d", "%Y/%m/%d"):
+        try:
+            return datetime.strptime(value[:10], fmt).date()
+        except ValueError:
+            continue
+    return date.fromisoformat(value[:10])
 
 
 def normalize_datetime(value: str) -> datetime:

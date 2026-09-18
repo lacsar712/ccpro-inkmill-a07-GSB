@@ -44,6 +44,23 @@ export interface GrindPass {
   operatorName: string;
 }
 
+export interface EnergyDaily {
+  id: number;
+  workshopId: number;
+  workDate: string;
+  kwh: number;
+  peakKw: number | null;
+}
+
+export interface EnergyDailySummary {
+  workshopId: number | null;
+  startDate: string | null;
+  endDate: string | null;
+  totalKwh: number;
+  maxPeakKw: number | null;
+  dayCount: number;
+}
+
 export interface DashboardStats {
   workshopTotal: number;
   grindingMillCount: number;

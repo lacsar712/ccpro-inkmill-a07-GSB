@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 
 from app.auth import hash_password
 from app.database import SessionLocal
+from app.models.energy_daily import EnergyDaily
 from app.models.grind_pass import GrindPass
 from app.models.mill import Mill
 from app.models.user import User
@@ -105,6 +106,56 @@ def seed() -> None:
                         duration_min=Decimal("60.00"),
                         media_type="1.0mm 玻璃珠",
                         operator_name="李工",
+                    ),
+                    # 一号油墨车间连续 5 天能耗日报，其中一天峰值缺测
+                    EnergyDaily(
+                        workshop_id=w1.id,
+                        work_date=date.today() - timedelta(days=4),
+                        kwh=Decimal("820.50"),
+                        peak_kw=Decimal("68.00"),
+                    ),
+                    EnergyDaily(
+                        workshop_id=w1.id,
+                        work_date=date.today() - timedelta(days=3),
+                        kwh=Decimal("864.00"),
+                        peak_kw=Decimal("72.40"),
+                    ),
+                    EnergyDaily(
+                        workshop_id=w1.id,
+                        work_date=date.today() - timedelta(days=2),
+                        kwh=Decimal("790.25"),
+                        peak_kw=None,
+                    ),
+                    EnergyDaily(
+                        workshop_id=w1.id,
+                        work_date=date.today() - timedelta(days=1),
+                        kwh=Decimal("903.75"),
+                        peak_kw=Decimal("75.10"),
+                    ),
+                    EnergyDaily(
+                        workshop_id=w1.id,
+                        work_date=date.today(),
+                        kwh=Decimal("612.00"),
+                        peak_kw=Decimal("70.60"),
+                    ),
+                    # 调墨中心连续 3 天
+                    EnergyDaily(
+                        workshop_id=w2.id,
+                        work_date=date.today() - timedelta(days=2),
+                        kwh=Decimal("210.00"),
+                        peak_kw=Decimal("24.80"),
+                    ),
+                    EnergyDaily(
+                        workshop_id=w2.id,
+                        work_date=date.today() - timedelta(days=1),
+                        kwh=Decimal("236.50"),
+                        peak_kw=None,
+                    ),
+                    EnergyDaily(
+                        workshop_id=w2.id,
+                        work_date=date.today(),
+                        kwh=Decimal("198.40"),
+                        peak_kw=Decimal("22.30"),
                     ),
                 ]
             )

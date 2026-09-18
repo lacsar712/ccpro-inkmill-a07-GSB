@@ -18,3 +18,6 @@ class Workshop(Base):
     )
 
     mills: Mapped[list["Mill"]] = relationship("Mill", back_populates="workshop")
+    energy_dailies: Mapped[list["EnergyDaily"]] = relationship(
+        "EnergyDaily", back_populates="workshop"
+    )
